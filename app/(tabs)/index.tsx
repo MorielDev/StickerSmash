@@ -2,6 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Image } from "expo-image";
 import Button from "@/components/Button";
+import * as MediaLibrary from 'expo-media-library';
 
 import ImageViewer from '@/components/ImageViewer';
 import * as ImagePicker from 'expo-image-picker';
@@ -19,6 +20,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 const PlaceholderImage = require('@/assets/images/background-image.png');
 
 export default function Index() {
+  const [status, requestPermission] = MediaLibrary.usePermissions();
   const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined);
   const [showAppOptions, setShowAppOptions] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -38,6 +40,10 @@ export default function Index() {
       alert('You did not select any image.');
     }
   };
+
+  if (status === null) {
+    requestPermission();
+  }
 
   const onReset = () => {
     setShowAppOptions(false);
